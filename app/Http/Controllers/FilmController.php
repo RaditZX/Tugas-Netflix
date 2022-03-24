@@ -42,17 +42,21 @@ class FilmController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store()
-    {
-        film::create([
+    public function store(Request $request)
+    { if($request->file('image')){
+       film::create([
             "name" => request('name'),
             "genre" => request('genre'),
-            "image" => request('image'),
             "video" => request('video'),
             "deskripsi" => request('deskripsi'),
+            'image' => $request->file('image')->store('post-image'),
             'user_id' => auth()->id()
         ]);
+    
+      
+        }
         return redirect('/list');
+    
     }
 
     /**
@@ -89,14 +93,16 @@ class FilmController extends Controller
      */
     public function update(Request $request,  $id)
     {
+        if($request->file('image')){
         film::find($id)->update([
             "name" => request('name'),
             "genre" => request('genre'),
-            "image" => request('image'),
+            'image' => $request->file('image')->store('post-image'),
             "video" => request('video'),
             "deskripsi" => request('deskripsi'),
             'user_id' => auth()->id()
         ]);
+    }
         return redirect('/list');
         
         

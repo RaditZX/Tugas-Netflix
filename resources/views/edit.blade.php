@@ -6,7 +6,7 @@
 @if ($film->user_id!= auth()->id())
 <h1>Error</h1>
 @else
-<form action="{{ url('film',$film->id)}}" method="POST">
+<form action="{{ url('film',$film->id)}}" method="POST" enctype="multipart/form-data">
 @csrf
 @method("PUT")
 
@@ -21,9 +21,10 @@
     <input type="text" class="form-control" name="genre"  value="{{ $film->genre }}"id="exampleInputPassword1" placeholder="Password">
   </div>
   
-  <div class="form-group">
-    <label for="exampleInputPassword1">Image</label>
-    <input type="text" class="form-control" name="image" value="{{ $film->image }}" id="exampleInputPassword1" placeholder="Password">
+  <div class="mb-3">
+    <label for="image" class="form-label">Edit Image</label>
+    <img id="output"src="#" alt="your image" />
+    <input class="form-control" type="file" id="image" name="image"  accept="image/*" onchange="loadFile(event)" >
   </div>
   <div class="form-group">
     <label for="exampleInputPassword1">video</label>
@@ -40,3 +41,12 @@
 </form>
 @endif
 @endforeach
+<script>
+  var loadFile = function(event) {
+    var output = document.getElementById('output');
+    output.src = URL.createObjectURL(event.target.files[0]);
+    output.onload = function() {
+      URL.revokeObjectURL(output.src) // free memory
+    }
+  };
+</script>
